@@ -1,12 +1,14 @@
 import React from 'react';
+import './Header.css';
+import Nav from './Nav';
 
-
-function Header () {
+function Header() {
     return (
-        <header>
-            <img src="/Logo.svg"></img>
+        <header className="header">
+            <img src="/Logo.svg" alt="Logo" className="logo" />
+            <Nav />
         </header>
-    )
+    );
 }
 
 

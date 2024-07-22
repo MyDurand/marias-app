@@ -1,0 +1,55 @@
+.main-section {
+    background-color:#fff;  
+    font-family: 'Karla', sans-serif; 
+
+  }
+  
+  .hero-section {
+    background-color: #5a6b61; 
+    padding: 40px; 
+    color: #fff;  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 50px;
+  }
+  
+  .hero-text {
+    max-width: 50%;
+  }
+  
+  .hero-text h1 {
+    font-size: 3rem;
+    color: #ffd700; 
+  }
+  
+  .hero-text h2 {
+    font-size: 2rem;
+    color: #333; 
+  }
+  
+  .hero-text p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    margin: 20px 0;
+  }
+  
+  .reserve-button {
+    background-color: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .hero-image {
+    max-width: 30%; 
+  }
+
+  .hero-image img {
+    max-width: 80%;
+    height: auto;
+  }
+
