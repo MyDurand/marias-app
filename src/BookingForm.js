@@ -23,6 +23,13 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Simple validation before submitting the form
+    if (!formData.date || !formData.time || !formData.guests || !formData.occasion) {
+      alert('Please fill out all fields before submitting.');
+      return;
+    }
+
     submitForm(formData);
   };
 
@@ -55,6 +62,7 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
           aria-required="true"
           data-testid="bookingTime"
         >
+          <option value="">Select a time</option>
           {availableTimes.map((time, index) => (
             <option key={index} value={time}>{time}</option>
           ))}
@@ -88,7 +96,7 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
           data-testid="bookingOccasion"
         >
           <option value="">Select an occasion</option>
-          <option value="">No special event</option>
+          <option value="none">No special event</option>
           <option value="birthday">Birthday</option>
           <option value="anniversary">Anniversary</option>
         </select>

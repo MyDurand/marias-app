@@ -1,31 +1,59 @@
 import { render, fireEvent, screen } from "@testing-library/react";
-import App from "./App";
-import { initializeTimes, updateTimes } from './Main'; 
+import BookingForm from "./BookingForm";
 
-global.fetchAPI = jest.fn();
+const mockTimes = ['17:00', '18:00', '19:00'];
+const mockSubmitForm = jest.fn();
+const mockDispatch = jest.fn();
 
-describe('Main Component Tests', () => {
-  beforeEach(() => {
-    fetchAPI.mockReset();
+beforeEach(() => {
+  mockSubmitForm.mockClear();
+  mockDispatch.mockClear();
+  jest.spyOn(window, 'alert').mockImplementation(() => {});
+});
+
+describe('BookingForm Component Tests', () => {
+  test('renders form with all input fields and submit button', () => {
+    render(<BookingForm availableTimes={mockTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
+    
+    const dateInput = screen.getByLabelText(/Date/i);
+    const timeInput = screen.getByLabelText(/Time/i);
+    const guestsInput = screen.getByLabelText(/Number of guests/i);
+    const occasionInput = screen.getByLabelText(/Occasion/i);
+    const submitButton = screen.getByRole('button', { name: /Submit reservation/i });
+
+    expect(dateInput).toBeInTheDocument();
+    expect(timeInput).toBeInTheDocument();
+    expect(guestsInput).toBeInTheDocument();
+    expect(occasionInput).toBeInTheDocument();
+    expect(submitButton).toBeInTheDocument();
   });
 
-  test('initializeTimes returns available booking times', () => {
-    const mockTimes = ['17:00', '18:00', '19:00'];
-    fetchAPI.mockReturnValue(mockTimes);
+  test('displays validation alert when submitting empty form', () => {
+    render(<BookingForm availableTimes={mockTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
+    
+    const submitButton = screen.getByRole('button', { name: /Submit reservation/i });
+    fireEvent.click(submitButton);
 
-    const times = initializeTimes();
-    expect(times).toEqual(mockTimes);
-    expect(fetchAPI).toHaveBeenCalled();
+    expect(mockSubmitForm).not.toHaveBeenCalled();
+    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields before submitting.');
   });
 
-  test('updateTimes returns available booking times for a given date', () => {
-    const mockTimes = ['17:00', '18:00', '19:00'];
-    fetchAPI.mockReturnValue(mockTimes);
+  test('calls submitForm when form is valid and submitted', () => {
+    render(<BookingForm availableTimes={mockTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
+    
+    fireEvent.change(screen.getByLabelText(/Date/i), { target: { value: '2023-07-22' } });
+    fireEvent.change(screen.getByLabelText(/Time/i), { target: { value: '18:00' } });
+    fireEvent.change(screen.getByLabelText(/Number of guests/i), { target: { value: '2' } });
+    fireEvent.change(screen.getByLabelText(/Occasion/i), { target: { value: 'birthday' } });
+    
+    const submitButton = screen.getByRole('button', { name: /Submit reservation/i });
+    fireEvent.click(submitButton);
 
-    const initialState = [];
-    const action = { type: 'UPDATE_TIMES', date: '2023-07-22' };
-    const times = updateTimes(initialState, action);
-    expect(times).toEqual(mockTimes);
-    expect(fetchAPI).toHaveBeenCalledWith(new Date(action.date));
+    expect(mockSubmitForm).toHaveBeenCalledWith({
+      date: '2023-07-22',
+      time: '18:00',
+      guests: '2',
+      occasion: 'birthday'
+    });
   });
 });
