@@ -88,6 +88,7 @@ function BookingForm({ availableTimes, dispatch, submitForm }) {
           data-testid="bookingOccasion"
         >
           <option value="">Select an occasion</option>
+          <option value="">No special event</option>
           <option value="birthday">Birthday</option>
           <option value="anniversary">Anniversary</option>
         </select>
